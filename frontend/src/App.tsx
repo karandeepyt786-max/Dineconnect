@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react'
 import { useDevice } from './hooks/useDevice'
+import Navbar from './components/Navbar'
+import Main from './components/Main'
+import Footer from './components/Footer'
 
 const App = () => {
   const{isMobile,isTablet,isDesktop}=useDevice()
  
   return (
-    <div>
-      <h1 className='text-red-500'>hlo</h1>
-      {isMobile && <h1>is mobile</h1>}
-      {isTablet && <h1>is Tablet</h1>}
-      {isDesktop && <h1>is Desktop</h1>}
+    <div className='w-full min-h-screen  grid grid-cols-1 grid-rows-[4rem_1fr_4rem]  bg-pink-300'>
+    
+<Navbar/>
+<Main/>
+<Footer/>
     </div>
   )
 }

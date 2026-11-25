@@ -35,8 +35,8 @@ const Navbar = () => {
           <div className={`CartNumbering ${Tokens.size.Paragraph}`}>2</div>
         </div>
 
-        <div className={`h-[2rem] w-[2rem] Profile bg-[${Tokens.colors.MainRed}]  rounded-full flex items-center justify-center`}>
-          <UserRound size={"1rem"} color="white" className="shrink-0" />
+        <div className={`h-[2rem] w-[2rem] Profile aspect-square  rounded-full flex items-center justify-center `} style={{backgroundColor:Tokens.colors.OrangeLight}}>
+          <UserRound  size={"1rem"} color="pink" className="shrink-0 "  />
         </div>
       </div>
     </div>

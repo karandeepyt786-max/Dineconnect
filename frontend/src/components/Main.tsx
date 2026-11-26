@@ -7,39 +7,34 @@ import { color } from "framer-motion";
 
 type Iconsprops =string | ComponentType<{className?:string}> | ReactNode
 
-type DarkBrownButton={
-  text:string,
-  icon?:Iconsprops,
-}
+  type DarkBrownButton={
+    text:string,
+    icon?:Iconsprops,
+  }
 
-type DiningEcosystemCard={
-  title:string,
-  titleicon:Iconsprops,
-  heading:string,
-  desc:string,
-  quote:string,
-  quoteicon:Iconsprops,
-  BTNtext:string,
-  BTNicon:Iconsprops
-}
+  type DiningEcosystemCard={
+    title:string,
+    titleicon:{Data:{icon:Iconsprops,Size:number,Color?:string}},
+    heading:string,
+    desc:string,
+    quote:string,
+    quoteicon:{Data:{icon:Iconsprops,Size:number,Color?:string}},
+    BTNtext:string,
+    BTNicon:{Data:{icon:Iconsprops,Size:number,Color?:string}}
+  }
 
-
-
-function DarkredBTN(props:DarkBrownButton){
-
-
-const rendericon =function P(icon:DarkBrownButton["icon"]){
+const rendericon =function P(icon:Iconsprops,Size:number,Color?:string){
   
   if(icon){
     
     if(typeof icon=="string"){
-      return <img src={`${icon}`}/>
+      return <img style={{width:`${Size}px`,height:`${Size}px`}} src={`${icon}`}/>
     }
     
     else if(typeof icon === "function" || (typeof icon=="object" && !isValidElement(icon))){
       
       const IconComponent=icon as unknown as ComponentType<{className?:string; size?:string|number}>
-    return <IconComponent size={10}/>
+    return <IconComponent  className={`text-[${Color}]`} size={`${Size?Size:10}rem`}/>
     }
     else{
       console.log("another icon type")
@@ -51,9 +46,14 @@ const rendericon =function P(icon:DarkBrownButton["icon"]){
 
   
 }
+
+function DarkredBTN(props:DarkBrownButton){
+
+
+
    
   return(
-    <div style={{backgroundColor:`${Tokens.colors.OrangeLight}`}} className={`FindFood flex ${Tokens.size.Paragraph}  gap-2 text-white  justify-center items-center py-2 rounded-md`}> {props.text} {rendericon(props.icon)}  </div>
+    <div style={{backgroundColor:`${Tokens.colors.OrangeLight}`}} className={`FindFood flex ${Tokens.size.Paragraph}  gap-2 text-white  justify-center items-center py-2 rounded-md`}> {props.text} {rendericon(props.icon,1)}  </div>
   ) 
 }
 
@@ -123,19 +123,22 @@ const DiningEcosystemCardData=(props:DiningEcosystemCard)=>{
   
   <div className="flex items-center justify-between title">
     <div className={`Topic w-fit ${Tokens.size.TinyWord} px-4 py-1 rounded-2xl`} style={{backgroundColor:`${Tokens.colors.Lightpink}`,color:`${Tokens.colors.Brown}`}}>{props.title}</div>
-    <img src={`${props.titleicon}`} alt="Shop" className={`w-4 h-4`} />
+    {/* <img src={`${props.titleicon}`} alt="Shop" className={`w-4 h-4`} /> */}
+    {rendericon(props.titleicon.Data.icon,props.titleicon.Data.Size)}
   </div>
+  
 
 <div className="py-3 leading-5 Heading">
   <div className={`Head ${Tokens.size.Heading3} font-bold `}>{props.heading}</div>
   <div className={`desc ${Tokens.size.TinyWord}`}>{props.desc}</div>
   <div className={`flex additionalFeatures p-2 rounded-md gap-1 my-3`} style={{backgroundColor:`${Tokens.colors.LightGray}`}}>
-  <Flame size={"1rem"} color={`${Tokens.colors.OrangeLight}`}/>
+  {/* <Flame size={"1rem"} color={`${Tokens.colors.OrangeLight}`}/> */}
+  {rendericon(props.quoteicon.Data.icon,props.quoteicon.Data.Size,props.quoteicon.Data.Color)}
     <div className={`Desc ${Tokens.size.TinyWord} font-bold`}>{props.quote}</div>
   </div>
   <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" className="w-full bg-cover aspect-video " alt="" />
   <div className="my-3 BrowseRestaurants">
-  <DarkredBTN icon={Utensils}  text={`${props.BTNtext}`}/>
+  <DarkredBTN icon={props.BTNicon.Data.icon}  text={`${props.BTNtext}`}/>
   </div>
 
 </div>
@@ -160,7 +163,16 @@ export function DiningEcosystem() {
     <div className={`Heading ${Tokens.size.Heading2} font-bold`}>Two Distinct Culinary Worlds, One Platform</div>
  </div>
  
- <DiningEcosystemCardData title={"Fast Kitchen Dispatch"} titleicon={""} heading={"Neighborhood Restaurants"} desc={"Explore top-rated local restaurants with verified reviews and full menus."} quote={"Tandoor specialties, multi-cuisine dining, quick 30-min delivery."} quoteicon={""} BTNtext={"Browse Restaurants"} BTNicon={""}/>
+ <DiningEcosystemCardData 
+ title={"Fast Kitchen Dispatch"} 
+  titleicon={{Data:{icon:Shop,Size:20}}}  
+  heading={"Neighborhood Restaurants"}
+  desc={"Explore top-rated local restaurants with verified reviews and full menus."} 
+  quote={"Tandoor specialties, multi-cuisine dining, quick 30-min delivery."} 
+  quoteicon={{Data:{icon:Flame,Size:1,Color:`${Tokens.colors.OrangeLight}`}}}
+  BTNtext={"Browse Restaurants"} 
+  BTNicon={{Data:{icon:Utensils,Size:20}}}
+  />
  
  </div>
   </>

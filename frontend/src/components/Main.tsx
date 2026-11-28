@@ -1,4 +1,4 @@
-import React, { ComponentType, isValidElement, ReactNode, useState } from "react";
+import React, { ComponentType, CSSProperties, isValidElement, ReactNode, useState } from "react";
 import { useDevice } from "../hooks/useDevice";
 import { Tokens } from "../utils/Images";
 
@@ -8,22 +8,28 @@ import { color } from "framer-motion";
 type Iconsprops =string | ComponentType<{className?:string}> | ReactNode
 
   type DarkBrownButton={
-    text:string,
-    icon?:Iconsprops,
+    text:String,
+    icon?:{Data:{icon:Iconsprops,Size?:number,Color?:String}},
+    BGcolor?:String
   }
+
+ 
 
   type DiningEcosystemCard={
-    title:string,
-    titleicon:{Data:{icon:Iconsprops,Size:number,Color?:string}},
-    heading:string,
-    desc:string,
-    quote:string,
-    quoteicon:{Data:{icon:Iconsprops,Size:number,Color?:string}},
-    BTNtext:string,
-    BTNicon:{Data:{icon:Iconsprops,Size:number,Color?:string}}
+
+  title:{titleData:
+    {text:String,textColor:String,BGColor?:String,icon:{Data:
+      {icon:Iconsprops,Size?:Number,Color?:String}
+    }
+  }}, 
+  ImagSRC:String,
+  headingandDesc:{Heading:{Heading:String,desc:String}},
+  quote:{QuoteData:{Quotetitle:String,QuoteIcon:{Data:{icon:Iconsprops,Size:Number,Color?:String}}}} ,
+  BTNtext:{BTNData:{BTNtext:String,BTNIcon:{Data:{icon:Iconsprops,Size:Number,Color?:String},BTNBGcolor:String}}} ,
+  
   }
 
-const rendericon =function P(icon:Iconsprops,Size:number,Color?:string){
+const rendericon =function P(icon:Iconsprops="#FFFFFF",Size:Number=1,Color?:String){
   
   if(icon){
     
@@ -33,8 +39,8 @@ const rendericon =function P(icon:Iconsprops,Size:number,Color?:string){
     
     else if(typeof icon === "function" || (typeof icon=="object" && !isValidElement(icon))){
       
-      const IconComponent=icon as unknown as ComponentType<{className?:string; size?:string|number}>
-    return <IconComponent  className={`text-[${Color}]`} size={`${Size?Size:10}rem`}/>
+      const IconComponent=icon as unknown as ComponentType<{className?:string; size?:string|number; style?:CSSProperties}>
+    return <IconComponent  style={{color:`${Color}`}} size={`${Size?Size:10}rem`}/>
     }
     else{
       console.log("another icon type")
@@ -53,7 +59,7 @@ function DarkredBTN(props:DarkBrownButton){
 
    
   return(
-    <div style={{backgroundColor:`${Tokens.colors.OrangeLight}`}} className={`FindFood flex ${Tokens.size.Paragraph}  gap-2 text-white  justify-center items-center py-2 rounded-md`}> {props.text} {rendericon(props.icon,1)}  </div>
+    <div style={{backgroundColor:`${props.BGcolor ? props.BGcolor :Tokens.colors.OrangeLight}`}} className={`FindFood flex ${Tokens.size.Paragraph}  gap-2 text-white  justify-center items-center py-2 rounded-md`}> {props.text} {rendericon(props.icon?.Data.icon,props.icon?.Data.Size,props.icon?.Data.Color)}  </div>
   ) 
 }
 
@@ -95,7 +101,7 @@ function SearchMeal() {
             <input className={`SearchData outline-none ${Tokens.size.TinyWord} `} size={placeholderText.length} type="text" placeholder={`${placeholderText}`} name="" id="" />
         </div>
 
-<DarkredBTN icon={ArrowRight} text={"Find Food"}/>
+<DarkredBTN  icon={{Data:{icon:ArrowRight,Size:1,Color:"white"}}} text={"Find Food"}/>
       </div>
 
       <div className={`PopularSearches flex ${Tokens.size.TinyWord} w-full gap-10`}>
@@ -119,26 +125,26 @@ const DiningEcosystemCardData=(props:DiningEcosystemCard)=>{
   return(
     <>
 
-<div className="p-3 bg-white RestaurantAndHome rounded-3xl">
+<div className="px-3  bg-white RestaurantAndHome rounded-3xl">
   
   <div className="flex items-center justify-between title">
-    <div className={`Topic w-fit ${Tokens.size.TinyWord} px-4 py-1 rounded-2xl`} style={{backgroundColor:`${Tokens.colors.Lightpink}`,color:`${Tokens.colors.Brown}`}}>{props.title}</div>
+    <div className={`Topic w-fit ${Tokens.size.TinyWord} px-4 py-1 rounded-2xl`} style={{backgroundColor:`${props.title.titleData.BGColor}`,color:`${props.title.titleData.textColor}`}}>{props.title.titleData.text}</div>
     {/* <img src={`${props.titleicon}`} alt="Shop" className={`w-4 h-4`} /> */}
-    {rendericon(props.titleicon.Data.icon,props.titleicon.Data.Size)}
+    {rendericon(props.title.titleData.icon.Data.icon,props.title.titleData.icon.Data.Size,props.title.titleData.icon.Data.Color)}
   </div>
   
 
 <div className="py-3 leading-5 Heading">
-  <div className={`Head ${Tokens.size.Heading3} font-bold `}>{props.heading}</div>
-  <div className={`desc ${Tokens.size.TinyWord}`}>{props.desc}</div>
+  <div className={`Head ${Tokens.size.Heading3} font-bold `}>{props.headingandDesc.Heading.Heading}</div>
+  <div className={`desc ${Tokens.size.TinyWord}`}>{props.headingandDesc.Heading.desc}</div>
   <div className={`flex additionalFeatures p-2 rounded-md gap-1 my-3`} style={{backgroundColor:`${Tokens.colors.LightGray}`}}>
   {/* <Flame size={"1rem"} color={`${Tokens.colors.OrangeLight}`}/> */}
-  {rendericon(props.quoteicon.Data.icon,props.quoteicon.Data.Size,props.quoteicon.Data.Color)}
-    <div className={`Desc ${Tokens.size.TinyWord} font-bold`}>{props.quote}</div>
+  {rendericon(props.quote.QuoteData.QuoteIcon.Data.icon,props.quote.QuoteData.QuoteIcon.Data.Size,props.quote.QuoteData.QuoteIcon.Data.Color)}
+    <div className={`Desc ${Tokens.size.TinyWord} font-bold`}>{props.quote.QuoteData.Quotetitle}</div>
   </div>
-  <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" className="w-full bg-cover aspect-video " alt="" />
+  <img src={`${props.ImagSRC}`} className="w-full bg-cover aspect-video " alt="" />
   <div className="my-3 BrowseRestaurants">
-  <DarkredBTN icon={props.BTNicon.Data.icon}  text={`${props.BTNtext}`}/>
+  <DarkredBTN BGcolor={props.BTNtext.BTNData.BTNIcon.BTNBGcolor}  icon={{Data:{icon:props.BTNtext.BTNData.BTNIcon.Data.icon,Size:1,Color:"white"}}}  text={`${props.BTNtext.BTNData.BTNtext}` }/>
   </div>
 
 </div>
@@ -163,16 +169,29 @@ export function DiningEcosystem() {
     <div className={`Heading ${Tokens.size.Heading2} font-bold`}>Two Distinct Culinary Worlds, One Platform</div>
  </div>
  
+
+<div className="flex flex-col">
+
  <DiningEcosystemCardData 
- title={"Fast Kitchen Dispatch"} 
-  titleicon={{Data:{icon:Shop,Size:20}}}  
-  heading={"Neighborhood Restaurants"}
-  desc={"Explore top-rated local restaurants with verified reviews and full menus."} 
-  quote={"Tandoor specialties, multi-cuisine dining, quick 30-min delivery."} 
-  quoteicon={{Data:{icon:Flame,Size:1,Color:`${Tokens.colors.OrangeLight}`}}}
-  BTNtext={"Browse Restaurants"} 
-  BTNicon={{Data:{icon:Utensils,Size:20}}}
-  />
+ title={{titleData:{text:"Fast Kitchen Dispatch",textColor:"#6B3700",BGColor:"#FFDCC3",icon:{Data:{icon:Shop,Size:20}}}}} 
+  ImagSRC={"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"}
+
+ headingandDesc={{Heading:{Heading:"Neighborhood Restaurants",desc:"Explore top-rated local restaurants with verified reviews and full menus."}}}
+ quote={{QuoteData:{Quotetitle:"Tandoor specialties, multi-cuisine dining, quick 30-min delivery.",QuoteIcon:{Data:{icon:Flame,Size:1,Color:`${Tokens.colors.OrangeLight}`}}}}} 
+ BTNtext={{BTNData:{BTNtext:"Browse Restaurants",BTNIcon:{Data:{icon:Utensils,Size:20,Color:"#228B22"},BTNBGcolor:`#FFFFFF`}}}} 
+/>
+
+ <DiningEcosystemCardData 
+ title={{titleData:{text:"Handcrafted Ghar Ka Khana",textColor:"#005229",BGColor:"#A9F3BA",icon:{Data:{icon:Soup,Size:1,Color:"#005229"}}}}} 
+ ImagSRC={"https://images.unsplash.com/photo-1767121947913-a310610e8f2c?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"}
+ headingandDesc={{Heading:{Heading:"Home Chef Kitchens",desc:"Enjoy hygienic, home-cooked daily tiffins and regional dishes made fresh."}}}
+ quote={{QuoteData:{Quotetitle:"Limited daily batches, stone-ground masalas, FSSAI registered homes.",QuoteIcon:{Data:{icon:Sprout,Size:1,Color:`#005229`}}}}} 
+ BTNtext={{BTNData:{BTNtext:"Meet Home Chefs",BTNIcon:{Data:{icon:Heart,Size:20,Color:"#228B22"},BTNBGcolor:`#236B3E`}}}} 
+/>
+
+</div>
+
+
  
  </div>
   </>
@@ -211,7 +230,7 @@ const Main = () => {
   const { isMobile, isTablet, isDesktop } = useDevice();
 
   return (
-    <div className="flex flex-col justify-between h-auto bg-[#FAF2EE] px-4 gap-6">
+    <div className="flex flex-col justify-between h-auto bg-[#FAF2EE] px-4 gap-4">
       <SearchMeal />
       <DiningEcosystem />
       <DailySelection />

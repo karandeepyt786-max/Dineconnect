@@ -7,9 +7,7 @@ export const Tokens = {
     LightGray:"#FFF8F5",
     ParaColor: "#5A413B",
     OrangeLight:"#C83E1D",
-    Lightpink:"#FFDCC3",
     Brown :"#6E3900",
-    
   },
   size: {
     Heading1: "text-5xl ", // responsive classes
